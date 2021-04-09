@@ -33,7 +33,7 @@ from datetime import date as dt
 #features = st.beta_container()
 
 # FAZ DOWNLOAD DO ARQUIVO ZIP E SALVA NA PASTA E CRIA O DF
-#@st.cache
+@st.cache
 def load_data():
     file_path = "https://data.brasil.io/dataset/covid19/caso_full.csv.gz"
     r = requests.get(file_path)
@@ -59,7 +59,7 @@ dia_mort  = data_mt.loc[(data_mt['place_type']=='state')&(data_mt['is_last']==Tr
 
 
 # Cria a tabela de Confirmados e Mortes
-
+@st.cache
 def load_table():
     tab = load_data()
     tab = tab.loc[tab['is_last']==True]\
@@ -86,7 +86,7 @@ def grafico_casos():
         ax = ax    
         )
     # ax.set_title(f"Casos Confirmados de Coronavirus - MT\nDia de referência:{last_day}/{last_month}/{last_year}", fontsize=10)
-    ax.legend(loc='upper left',fontsize=5, frameon=False)
+    ax.legend(loc='upper left',fontsize=6, frameon=True)
     ax.set_yticklabels([])
     plt.xticks(rotation='vertical', fontsize=(6)) #define os locais e os rótulos dos xticks
     plt.xlabel(None)
@@ -96,7 +96,7 @@ def grafico_casos():
         ax.spines[s].set_visible(False) 
 
     # ax.annotate(' Fonte: Secretarias Estaduais de Saúde\nConsolidação por Brasil.IO\n*Média Móvel: Média de casos dos últimos 7 dias', xy=(0.5,.07),xycoords='figure fraction',horizontalalignment='center',verticalalignment='top',fontsize=10,color='#2C3E50')
-    ax.annotate('Dia:{}/{}/{}\nCasos confirmados:{:.0f}'.format(last_day,last_month,last_year,dia_conf), xy=(0.09,.83),xycoords='figure fraction',horizontalalignment='left',verticalalignment='top',fontsize=9,color='grey')
+    ax.annotate('Dia:{}/{}/{}\nCasos confirmados:{:.0f}'.format(last_day,last_month,last_year,dia_conf), xy=(0.09,.83),xycoords='figure fraction',horizontalalignment='left',verticalalignment='top',fontsize=8,color='grey')
     return fig1
 
 
@@ -116,7 +116,7 @@ def grafico_mortes():
         ax = ax    
         )
     # ax.set_title(f"Mortes Confirmadas de Coronavirus - MT\nDia de referência:{last_day}/{last_month}/{last_year}", fontsize=10)
-    ax.legend(loc='upper left',fontsize=4)
+    ax.legend(loc='upper left',fontsize=6)
     ax.set_yticklabels([])
     plt.xticks(rotation='vertical', fontsize=(6)) #define os locais e os rótulos dos xticks
     plt.xlabel(None)
@@ -126,7 +126,7 @@ def grafico_mortes():
         ax.spines[s].set_visible(False) 
 
     # ax.annotate(' Fonte: Secretarias Estaduais de Saúde\nConsolidação por Brasil.IO\n*Média Móvel: Média de casos dos últimos 7 dias', xy=(0.5,.07),xycoords='figure fraction',horizontalalignment='center',verticalalignment='top',fontsize=10,color='#2C3E50')
-    ax.annotate('Dia:{}/{}/{}\nMortes confirmadas:{:.0f}'.format(last_day,last_month,last_year,dia_mort), xy=(0.09,.83),xycoords='figure fraction',horizontalalignment='left',verticalalignment='top',fontsize=9,color='grey')
+    ax.annotate('Dia:{}/{}/{}\nMortes confirmadas:{:.0f}'.format(last_day,last_month,last_year,dia_mort), xy=(0.09,.83),xycoords='figure fraction',horizontalalignment='left',verticalalignment='top',fontsize=8,color='grey')
     return fig2
 
 
@@ -136,10 +136,16 @@ def grafico_mortes():
 # st.image('image1.jpg')
 # st.markdown('<style>body{background-color: #f2f2f2f2;}</style>',unsafe_allow_html=True)
 
-st.title('VISUAL DADOS - DS  \nCoronavirus MT ')
+html_temp = """
+<div style="background-color:tomato;padding:1.5px">
+<h1 style="color:white;text-align:center;">Panorama Coronavirus MT</h1>
+</div><br>"""
+st.markdown(html_temp,unsafe_allow_html=True)
+
+# st.title('VISUAL DADOS - DS  \nPanorama Coronavirus MT ')
 # st.subheader('Painel de dados e gráficos sobre a evolução da Pandemía do novo Coronavírus no estado de Mato Grosso')
 
-st.write(f'Estado: **MATO GROSSO**  \nÚltima Atualização: **{last_day}/{last_month}/{last_year}**  \nTotal de Casos Confirmados: **{tconf}**  \nTotal de Mortes Confirmadas: **{tmort}**  \nCasos Confirmados Neste Dia: **{dia_conf}**  \nMortes Confirmadas Neste Dia: **{dia_mort}**')
+st.write(f'Estado  \n**MATO GROSSO**  \nÚltima Atualização  \n**{last_day}/{last_month}/{last_year}**  \nTotal de Casos Confirmados  \n**{tconf}**  \nTotal de Mortes Confirmadas  \n**{tmort}**  \nCasos Confirmados Neste Dia  \n**{dia_conf}**  \nMortes Confirmadas Neste Dia  \n**{dia_mort}**')
 
 st.markdown('Gráfico 1. Casos Confirmados Por Dia - MT')
 mc = grafico_casos()
