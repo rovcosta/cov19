@@ -81,12 +81,12 @@ def grafico_casos():
     sns.set_style('white')
     fig1, ax = plt.subplots(1, figsize=(4,3), dpi=80)
     g_casos.plot(
-        color=['lightblue','orange'], 
+        color=['#00bfff','#bf00ff'], 
         linewidth = 0.7,
         ax = ax    
         )
     # ax.set_title(f"Casos Confirmados de Coronavirus - MT\nDia de referência:{last_day}/{last_month}/{last_year}", fontsize=10)
-    ax.legend(loc='upper left',fontsize=4)
+    ax.legend(loc='upper left',fontsize=5, frameon=False)
     ax.set_yticklabels([])
     plt.xticks(rotation='vertical', fontsize=(6)) #define os locais e os rótulos dos xticks
     plt.xlabel(None)
@@ -96,8 +96,9 @@ def grafico_casos():
         ax.spines[s].set_visible(False) 
 
     # ax.annotate(' Fonte: Secretarias Estaduais de Saúde\nConsolidação por Brasil.IO\n*Média Móvel: Média de casos dos últimos 7 dias', xy=(0.5,.07),xycoords='figure fraction',horizontalalignment='center',verticalalignment='top',fontsize=10,color='#2C3E50')
-    ax.annotate('Casos no dia:{:,d}'.format(dia_conf), xy=(0.14,.75),xycoords='figure fraction',horizontalalignment='left',verticalalignment='top',fontsize=9,color='grey')
+    ax.annotate('Dia:{}/{}/{}\nCasos confirmados:{:.0f}'.format(last_day,last_month,last_year,dia_conf), xy=(0.09,.83),xycoords='figure fraction',horizontalalignment='left',verticalalignment='top',fontsize=9,color='grey')
     return fig1
+
 
 def grafico_mortes():
     g_mortes = data_mt.loc[data_mt['place_type']=='state'].copy()
@@ -105,11 +106,12 @@ def grafico_mortes():
     g_mortes.sort_index(inplace=True)
     g_mortes = g_mortes.fillna(0)[['new_deaths']]
     g_mortes['Média movel'] = g_mortes.rolling(window=7).mean()
+    g_mortes.rename({'new_deaths':'Mortes por dia'},axis=1, inplace=True)
     #grafico
     sns.set_style('white')
     fig2, ax = plt.subplots(1, figsize=(4,3), dpi=80)
     g_mortes.plot(
-        color=['lightblue','#ec7063'], 
+        color=['#ffbb33','#ff3333'], 
         linewidth = 0.7,
         ax = ax    
         )
@@ -124,17 +126,20 @@ def grafico_mortes():
         ax.spines[s].set_visible(False) 
 
     # ax.annotate(' Fonte: Secretarias Estaduais de Saúde\nConsolidação por Brasil.IO\n*Média Móvel: Média de casos dos últimos 7 dias', xy=(0.5,.07),xycoords='figure fraction',horizontalalignment='center',verticalalignment='top',fontsize=10,color='#2C3E50')
-    ax.annotate('Mortes no dia:{:,d}'.format(dia_mort), xy=(0.14,.75),xycoords='figure fraction',horizontalalignment='left',verticalalignment='top',fontsize=9,color='grey')
+    ax.annotate('Dia:{}/{}/{}\nMortes confirmadas:{:.0f}'.format(last_day,last_month,last_year,dia_mort), xy=(0.09,.83),xycoords='figure fraction',horizontalalignment='left',verticalalignment='top',fontsize=9,color='grey')
     return fig2
+
 
 ### DISPLAY ON APP ####
 # show table 
 
 # st.image('image1.jpg')
+# st.markdown('<style>body{background-color: #f2f2f2f2;}</style>',unsafe_allow_html=True)
+
 st.title('VISUAL DADOS - DS  \nCoronavirus MT ')
 # st.subheader('Painel de dados e gráficos sobre a evolução da Pandemía do novo Coronavírus no estado de Mato Grosso')
 
-st.write(f'Estado: **MT**  \nÚltima Atualização: **{last_day}/{last_month}/{last_year}**  \nTotal de Casos Confirmados: **{tconf}**  \nTotal de Mortes Confirmadas: **{tmort}**  \nCasos Confirmados Neste Dia: **{dia_conf}**  \nMortes Confirmadas Neste Dia: **{dia_mort}**')
+st.write(f'Estado: **MATO GROSSO**  \nÚltima Atualização: **{last_day}/{last_month}/{last_year}**  \nTotal de Casos Confirmados: **{tconf}**  \nTotal de Mortes Confirmadas: **{tmort}**  \nCasos Confirmados Neste Dia: **{dia_conf}**  \nMortes Confirmadas Neste Dia: **{dia_mort}**')
 
 st.markdown('Gráfico 1. Casos Confirmados Por Dia - MT')
 mc = grafico_casos()
