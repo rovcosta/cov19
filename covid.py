@@ -33,7 +33,7 @@ from datetime import date as dt
 #features = st.beta_container()
 
 # FAZ DOWNLOAD DO ARQUIVO ZIP E SALVA NA PASTA E CRIA O DF
-@st.cache
+#@st.cache
 def load_data():
     file_path = "https://data.brasil.io/dataset/covid19/caso_full.csv.gz"
     r = requests.get(file_path)
@@ -59,7 +59,7 @@ dia_mort  = data_mt.loc[(data_mt['place_type']=='state')&(data_mt['is_last']==Tr
 
 
 # Cria a tabela de Confirmados e Mortes
-@st.cache
+#@st.cache
 def load_table():
     tab = load_data()
     tab = tab.loc[tab['is_last']==True]\
