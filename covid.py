@@ -129,7 +129,9 @@ def grafico_mortes():
     ax.annotate('Dia:{}/{}/{}\nMortes confirmadas:{:.0f}'.format(last_day,last_month,last_year,dia_mort), xy=(0.09,.83),xycoords='figure fraction',horizontalalignment='left',verticalalignment='top',fontsize=5,color='grey')
     return fig2
 
-
+city = data_mt.loc[(data_mt['place_type']=='city')&(data_mt['date']>='2021-1-1')].copy()
+#cria a lista suspensa com os municípios
+cityList = list(city['city'].drop_duplicates())
 
 
 ###  APP HEADERS
@@ -162,10 +164,7 @@ if page == 'Estado':
     st.text("")
     st.markdown('**Desenvolvido por:**  \n Roverson Costa  \n **Agradecimentos:**  \n BRASIL.IO e toda acomunidade de programadores organizam e disponibilizam os dados da pandemia em todo território nacional, de forma eficiente, clara e de maneira acessível.  \n **Fonte de dados:**  \n [link] https://brasil.io/dataset/covid19/caso_full')
 #### POR MUNICÍPIO:    
-else: 
-    city = data_mt.loc[(data_mt['place_type']=='city')&(data_mt['date']>='2021-1-1')].copy()
-    #cria a lista suspensa com os municípios
-    cityList = list(city['city'].drop_duplicates())
+else:
     result = st.selectbox('Município:',cityList)
     #variáveis de contagem
     c_last_day = city.loc[city['city']==result]['last_available_date'].max().day
@@ -181,6 +180,7 @@ else:
 
     st.write(f'Município  \n**{result}**  \nÚltima Atualização  \n**{c_last_day}/{c_last_month}/{c_last_year}**  \nTotal de Casos Confirmados  \n**{c_tconf}**  \nTotal de Mortes Confirmadas  \n**{c_tmort}**  \nCasos Confirmados Neste Dia  \n**{c_dia_conf}**  \nMortes Confirmadas Neste Dia  \n**{c_dia_mort}**')
 
+    @st.cache
     def gcasos_city():
         g = city.loc[city['city']==result]
         day = g['last_available_date'].max().day
@@ -221,6 +221,7 @@ else:
     st.pyplot(gc1)
 
     ### MORTES####
+    @st.cache
     def gmortes_city():
         g = data_mt.loc[(data_mt['place_type']=='city')&(data_mt['city']==result)&(data_mt['date']>='2021-1-1')].copy()
         day = g['last_available_date'].max().day
