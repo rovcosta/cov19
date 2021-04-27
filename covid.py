@@ -180,7 +180,6 @@ else:
 
     st.write(f'Município  \n**{result}**  \nÚltima Atualização  \n**{c_last_day}/{c_last_month}/{c_last_year}**  \nTotal de Casos Confirmados  \n**{c_tconf}**  \nTotal de Mortes Confirmadas  \n**{c_tmort}**  \nCasos Confirmados Neste Dia  \n**{c_dia_conf}**  \nMortes Confirmadas Neste Dia  \n**{c_dia_mort}**')
 
-    @st.cache
     def gcasos_city():
         g = city.loc[city['city']==result]
         day = g['last_available_date'].max().day
@@ -221,7 +220,7 @@ else:
     st.pyplot(gc1)
 
     ### MORTES####
-    @st.cache
+   
     def gmortes_city():
         g = data_mt.loc[(data_mt['place_type']=='city')&(data_mt['city']==result)&(data_mt['date']>='2021-1-1')].copy()
         day = g['last_available_date'].max().day
