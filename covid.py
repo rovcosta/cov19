@@ -23,8 +23,8 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import streamlit as st
 import requests
-import plotly.graph_objects as go
-import plotly.express as px
+# import plotly.graph_objects as go
+# import plotly.express as px
 from datetime import datetime
 from datetime import date as dt
 
@@ -33,7 +33,7 @@ from datetime import date as dt
 #features = st.beta_container()
 
 # FAZ DOWNLOAD DO ARQUIVO ZIP E SALVA NA PASTA E CRIA O DF
-#@st.cache
+@st.cache
 def load_data():
     file_path = "https://data.brasil.io/dataset/covid19/caso_full.csv.gz"
     r = requests.get(file_path)
@@ -59,7 +59,7 @@ dia_mort  = data_mt.loc[(data_mt['place_type']=='state')&(data_mt['is_last']==Tr
 
 
 # Cria a tabela de Confirmados e Mortes
-#@st.cache
+@st.cache
 def load_table_state():
     tab = data_mt.copy()
     tab = tab.loc[tab['is_last']==True]\
@@ -81,7 +81,7 @@ def grafico_casos():
     sns.set_style('white')
     fig1, ax = plt.subplots(1, figsize=(4,3), dpi=80)
     g_casos.plot(
-        color=['#00bfff','#bf00ff'], 
+        color=['lightgrey','#00bfff'], 
         linewidth = 0.7,
         ax = ax    
         )
@@ -111,7 +111,7 @@ def grafico_mortes():
     sns.set_style('white')
     fig2, ax = plt.subplots(1, figsize=(4,3), dpi=80)
     g_mortes.plot(
-        color=['#ffbb33','#ff3333'], 
+        color=['lightgrey','#ff3333'], 
         linewidth = 0.7,
         ax = ax    
         )
@@ -129,9 +129,11 @@ def grafico_mortes():
     ax.annotate('Dia:{}/{}/{}\nMortes confirmadas:{:.0f}'.format(last_day,last_month,last_year,dia_mort), xy=(0.09,.83),xycoords='figure fraction',horizontalalignment='left',verticalalignment='top',fontsize=5,color='grey')
     return fig2
 
-city = data_mt.loc[(data_mt['place_type']=='city')&(data_mt['date']>='2021-1-1')].copy()
-#cria a lista suspensa com os municípios
-cityList = list(city['city'].drop_duplicates())
+
+
+### DATA CIDADES
+
+
 
 
 ###  APP HEADERS
@@ -165,7 +167,13 @@ if page == 'Estado':
     st.markdown('**Desenvolvido por:**  \n Roverson Costa  \n **Agradecimentos:**  \n BRASIL.IO e toda acomunidade de programadores organizam e disponibilizam os dados da pandemia em todo território nacional, de forma eficiente, clara e de maneira acessível.  \n **Fonte de dados:**  \n [link] https://brasil.io/dataset/covid19/caso_full')
 #### POR MUNICÍPIO:    
 else:
+    # @st.cache
+    city = data_mt.loc[(data_mt['place_type']=='city')&(data_mt['date']>='2021-1-1')].copy()
+    #cria a lista suspensa com os municípios
+    cityList = list(city['city'].drop_duplicates()) 
     result = st.selectbox('Município:',cityList)
+
+
     #variáveis de contagem
     c_last_day = city.loc[city['city']==result]['last_available_date'].max().day
     c_last_month = city.loc[city['city']==result]['last_available_date'].max().month
@@ -197,7 +205,7 @@ else:
         fig3, ax = plt.subplots(1, figsize=(4,3), dpi=200)
         
         g.plot(
-            color=['#00bfff','#bf00ff'], 
+            color=['lightgrey','#00bfff'], 
             linewidth = 0.7,
             ax = ax    
             )
@@ -220,7 +228,6 @@ else:
     st.pyplot(gc1)
 
     ### MORTES####
-   
     def gmortes_city():
         g = data_mt.loc[(data_mt['place_type']=='city')&(data_mt['city']==result)&(data_mt['date']>='2021-1-1')].copy()
         day = g['last_available_date'].max().day
@@ -237,7 +244,7 @@ else:
         sns.set_style('white')
         fig4, ax = plt.subplots(1, figsize=(4,3), dpi=80)
         g.plot(
-            color=['#ffbb33','#ff3333'], 
+            color=['lightgrey','#ff3333'], 
             linewidth = 0.7,
             ax = ax
             )
@@ -254,6 +261,7 @@ else:
         # ax.annotate(' Fonte: Secretarias Estaduais de Saúde\nConsolidação por Brasil.IO\n*Média Móvel: Média de casos dos últimos 7 dias', xy=(0.5,.07),xycoords='figure fraction',horizontalalignment='center',verticalalignment='top',fontsize=10,color='#2C3E50')
         ax.annotate('Dia:{}/{}/{}\nMortes confirmadas:{:.0f}'.format(day,month,year,deaths_day), xy=(0.09,.83),xycoords='figure fraction',horizontalalignment='left',verticalalignment='top',fontsize=5,color='grey')
         return fig4
+
     st.markdown(f'**Gráfico 2**. Mortes Confirmadas Por Dia em {result} - MT 2021')
     gc2 = gmortes_city()
     st.pyplot(gc2)
