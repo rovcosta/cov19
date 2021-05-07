@@ -168,7 +168,7 @@ if page == 'Estado':
 #### POR MUNICÍPIO:    
 else:
     @st.cache
-    city = data_mt.loc[(data_mt['place_type']=='city')&(data_mt['date']>='2021-1-1')].copy()
+    city = data_mt.loc[(data_mt['place_type']=='city')&(data_mt['date']>='2021-1-1')]
     #cria a lista suspensa com os municípios
     cityList = list(city['city'].drop_duplicates()) 
     result = st.selectbox('Município:',cityList)
