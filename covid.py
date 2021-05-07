@@ -78,7 +78,7 @@ def grafico_casos():
     g_casos['Média Móvel'] = g_casos.rolling(window=7).mean()
     g_casos.rename({'new_confirmed':'Casos por dia'},axis=1, inplace=True)
     # gráfico
-    sns.set_style('white')
+    #sns.set_style('white')
     fig1, ax = plt.subplots(1, figsize=(4,3), dpi=80)
     g_casos.plot(
         color=['lightgrey','#00bfff'], 
@@ -87,10 +87,10 @@ def grafico_casos():
         )
     # ax.set_title(f"Casos Confirmados de Coronavirus - MT\nDia de referência:{last_day}/{last_month}/{last_year}", fontsize=10)
     ax.legend(loc='upper left',fontsize=6, frameon=True)
-    #ax.set_yticklabels([])
+    ax.set_yticklabels([])
     plt.xticks(rotation='vertical', fontsize=(6)) #define os locais e os rótulos dos xticks
-    #plt.xlabel(None)
-    #plt.ylabel(None)
+    plt.xlabel(None)
+    plt.ylabel(None)
 
     for s in ['top', 'right','left']: #'bottom', 'left'
         ax.spines[s].set_visible(False) 
