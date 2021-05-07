@@ -167,7 +167,7 @@ if page == 'Estado':
     st.markdown('**Desenvolvido por:**  \n Roverson Costa  \n **Agradecimentos:**  \n BRASIL.IO e toda acomunidade de programadores organizam e disponibilizam os dados da pandemia em todo território nacional, de forma eficiente, clara e de maneira acessível.  \n **Fonte de dados:**  \n [link] https://brasil.io/dataset/covid19/caso_full')
 #### POR MUNICÍPIO:    
 else:
-    # @st.cache
+    @st.cache
     city = data_mt.loc[(data_mt['place_type']=='city')&(data_mt['date']>='2021-1-1')].copy()
     #cria a lista suspensa com os municípios
     cityList = list(city['city'].drop_duplicates()) 
