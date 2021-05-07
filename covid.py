@@ -33,7 +33,7 @@ from datetime import date as dt
 #features = st.beta_container()
 
 # FAZ DOWNLOAD DO ARQUIVO ZIP E SALVA NA PASTA E CRIA O DF
-@st.cache
+#@st.cache
 def load_data():
     file_path = "https://data.brasil.io/dataset/covid19/caso_full.csv.gz"
     r = requests.get(file_path)
